@@ -4,17 +4,30 @@
  */
 package br.com.ifba.curso.view;
 
+import br.com.ifba.curso.entity.Curso;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author valdo
  */
-public class TelaCurso extends javax.swing.JFrame {
+public class TelaGerenciamentoCursos extends javax.swing.JFrame {
 
     /**
      * Creates new form TelaCurso
      */
-    public TelaCurso() {
+    public TelaGerenciamentoCursos() {
         initComponents();
+        
+        //Essa parte tem ligação com o método "preencherTabelaCursos".
+        Curso curso = new Curso();
+        List<Curso> listaCursos = new ArrayList();
+        
+        listaCursos = curso.listarTodosCursos();
+        this.preencherTabelaCursos(listaCursos);
     }
 
     /**
@@ -31,28 +44,53 @@ public class TelaCurso extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblCursos = new javax.swing.JTable();
+        tblGerenciamentoCursos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gerenciamento de Cursos");
         setBackground(new java.awt.Color(255, 255, 255));
+        setResizable(false);
 
         txtRetrieve.setText("Pesquisar...");
 
         btnCreate.setText("Adicionar");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         btnUpdate.setText("Editar");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Excluir");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
-        tblCursos.setModel(new javax.swing.table.DefaultTableModel(
+        tblGerenciamentoCursos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
                 "ID", "Nome", "Código", "Ativo?"
             }
-        ));
-        jScrollPane2.setViewportView(tblCursos);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tblGerenciamentoCursos);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -87,8 +125,56 @@ public class TelaCurso extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        //Torna a tela de adicionar curso visível.
+        new TelaAdicionarCurso().setVisible(true);
+    }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int jOP = JOptionPane.showConfirmDialog(null, "Deseja remover este curso?", "Atenção!", JOptionPane.YES_NO_OPTION);
+        int linhaSelecionada = tblGerenciamentoCursos.getSelectedRow();
+        
+        if(linhaSelecionada == -1){
+            JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada!");
+        }else{
+            DefaultTableModel dTM = (DefaultTableModel) tblGerenciamentoCursos.getModel();
+            
+        }
+        
+        if(jOP == JOptionPane.YES_OPTION){
+            
+            JOptionPane.showMessageDialog(null, "Curso removido com sucesso!");
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        new TelaEditarCurso().setVisible(true);
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    //Preenche a JTable da tela inicial com todos os cursos cadastrados no banco de dados.
+    private void preencherTabelaCursos(List<Curso> curso){
+        DefaultTableModel dTM = new DefaultTableModel();
+        
+        this.tblGerenciamentoCursos.setModel(dTM);
+        
+        dTM.addColumn("ID");
+        dTM.addColumn("Nome");
+        dTM.addColumn("Código");
+        dTM.addColumn("Ativo?");
+    
+        for (Curso c: curso) {
+            dTM.addRow(new Object[]{
+                c.getId(),
+                c.getNome(),
+                c.getCodigoCurso(),
+                c.getAtivo()
+            });
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -106,20 +192,21 @@ public class TelaCurso extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaCurso().setVisible(true);
+                new TelaGerenciamentoCursos().setVisible(true);
             }
         });
     }
@@ -129,7 +216,7 @@ public class TelaCurso extends javax.swing.JFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tblCursos;
+    private javax.swing.JTable tblGerenciamentoCursos;
     private javax.swing.JTextField txtRetrieve;
     // End of variables declaration//GEN-END:variables
 }
