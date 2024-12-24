@@ -4,30 +4,22 @@
  */
 package br.com.ifba.curso.view;
 
+import br.com.ifba.curso.dao.CursoDao;
 import br.com.ifba.curso.entity.Curso;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author valdo
  */
-public class TelaGerenciamentoCursos extends javax.swing.JFrame {
+public class TelaGerenciamentoCurso extends javax.swing.JFrame {
+    TelaAdicionarCurso tAC = new TelaAdicionarCurso();
+    TelaEditarCurso tEC = new TelaEditarCurso();
+    public CursoDao cursoDao = new CursoDao();
 
-    /**
-     * Creates new form TelaCurso
-     */
-    public TelaGerenciamentoCursos() {
+    public TelaGerenciamentoCurso() {
         initComponents();
-        
-        //Essa parte tem ligação com o método "preencherTabelaCursos".
-        Curso curso = new Curso();
-        List<Curso> listaCursos = new ArrayList();
-        
-        listaCursos = curso.listarTodosCursos();
-        this.preencherTabelaCursos(listaCursos);
+        this.atualizarTabela();
     }
 
     /**
@@ -44,7 +36,7 @@ public class TelaGerenciamentoCursos extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tblGerenciamentoCursos = new javax.swing.JTable();
+        tblGerenciamentoCurso = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciamento de Cursos");
@@ -74,23 +66,23 @@ public class TelaGerenciamentoCursos extends javax.swing.JFrame {
             }
         });
 
-        tblGerenciamentoCursos.setModel(new javax.swing.table.DefaultTableModel(
+        tblGerenciamentoCurso.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "ID", "Nome", "Código", "Ativo?"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+            }
+        ));
+        tblGerenciamentoCurso.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblGerenciamentoCursoMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tblGerenciamentoCursos);
+        jScrollPane2.setViewportView(tblGerenciamentoCurso);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -99,9 +91,9 @@ public class TelaGerenciamentoCursos extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtRetrieve)
+                        .addComponent(txtRetrieve, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -120,61 +112,40 @@ public class TelaGerenciamentoCursos extends javax.swing.JFrame {
                     .addComponent(btnUpdate)
                     .addComponent(btnDelete))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         //Torna a tela de adicionar curso visível.
-        new TelaAdicionarCurso().setVisible(true);
+        tAC.mostrarTela(this);
     }//GEN-LAST:event_btnCreateActionPerformed
-
+    
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int jOP = JOptionPane.showConfirmDialog(null, "Deseja remover este curso?", "Atenção!", JOptionPane.YES_NO_OPTION);
-        int linhaSelecionada = tblGerenciamentoCursos.getSelectedRow();
-        
-        if(linhaSelecionada == -1){
-            JOptionPane.showMessageDialog(this, "Nenhuma linha selecionada!");
-        }else{
-            DefaultTableModel dTM = (DefaultTableModel) tblGerenciamentoCursos.getModel();
-            
-        }
-        
-        if(jOP == JOptionPane.YES_OPTION){
-            
-            JOptionPane.showMessageDialog(null, "Curso removido com sucesso!");
+        //Exclui determinado curso que está selecionado na tabela, perguntando antes se o usuário o deseja excluir.
+        CursoDao cursoDao = new CursoDao();
+        Curso cursoEscolhido = this.cursoSelecionadoTabela();
+
+        int jOP = JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir esse curso?", "Atenção!", JOptionPane.YES_NO_OPTION);
+
+        if (jOP == JOptionPane.YES_OPTION) {
+            cursoDao.delete(cursoEscolhido);
+            JOptionPane.showMessageDialog(null, "Curso excluído com sucesso!");
+            this.atualizarTabela();
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        new TelaEditarCurso().setVisible(true);
+        //Torna a tela de editar curso visível.
+        tEC.mostrarTela(this);
     }//GEN-LAST:event_btnUpdateActionPerformed
 
-    //Preenche a JTable da tela inicial com todos os cursos cadastrados no banco de dados.
-    private void preencherTabelaCursos(List<Curso> curso){
-        DefaultTableModel dTM = new DefaultTableModel();
-        
-        this.tblGerenciamentoCursos.setModel(dTM);
-        
-        dTM.addColumn("ID");
-        dTM.addColumn("Nome");
-        dTM.addColumn("Código");
-        dTM.addColumn("Ativo?");
-    
-        for (Curso c: curso) {
-            dTM.addRow(new Object[]{
-                c.getId(),
-                c.getNome(),
-                c.getCodigoCurso(),
-                c.getAtivo()
-            });
-        }
-    }
-    
+    private void tblGerenciamentoCursoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGerenciamentoCursoMouseClicked
+        Curso curso = this.cursoSelecionadoTabela();
+    }//GEN-LAST:event_tblGerenciamentoCursoMouseClicked
     /**
      * @param args the command line arguments
      */
@@ -192,31 +163,54 @@ public class TelaGerenciamentoCursos extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaGerenciamentoCursos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(TelaGerenciamentoCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new TelaGerenciamentoCursos().setVisible(true);
+                new TelaGerenciamentoCurso().setVisible(true);
             }
         });
     }
+    //Atualiza a tabela assim que um curso é adicionado, editado ou excluído.
+    public void atualizarTabela() {
+        TabelaGerenciamentoCurso tGC = new TabelaGerenciamentoCurso(cursoDao.listarTodosCursos());
+        tblGerenciamentoCurso.setModel(tGC);
+    }
+    //Obtém as informações de um curso cadastrado, que está em determinada linha na tabela.
+    public Curso cursoSelecionadoTabela() {
+        int linhaSelecionada = tblGerenciamentoCurso.getSelectedRow();
 
+        if (linhaSelecionada >= 0) {
+            TabelaGerenciamentoCurso tGC = (TabelaGerenciamentoCurso) tblGerenciamentoCurso.getModel();
+
+            Curso curso = tGC.getObjetoCurso(linhaSelecionada);
+            return curso;
+        }
+
+        return null;
+    }
+    //Atualiza a tabela em tempo real após adicionar ou editar um curso.
+    public void metodoSubtelaAdicionarEditar(){
+        atualizarTabela();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable tblGerenciamentoCursos;
+    private javax.swing.JTable tblGerenciamentoCurso;
     private javax.swing.JTextField txtRetrieve;
     // End of variables declaration//GEN-END:variables
 }

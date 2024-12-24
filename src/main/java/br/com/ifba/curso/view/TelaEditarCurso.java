@@ -4,19 +4,17 @@
  */
 package br.com.ifba.curso.view;
 
+/*import br.com.ifba.curso.dao.CursoDao;
 import br.com.ifba.curso.entity.Curso;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.JOptionPane;*/
 
 /**
  *
  * @author valdo
  */
 public class TelaEditarCurso extends javax.swing.JFrame {
-
-    /**
-     * Creates new form TelaEditarCurso
-     */
+    private TelaGerenciamentoCurso tGC;
+    
     public TelaEditarCurso() {
         initComponents();
     }
@@ -36,7 +34,7 @@ public class TelaEditarCurso extends javax.swing.JFrame {
         txtCodigo = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        txtAtivo = new javax.swing.JTextField();
+        cbxAtivo = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -58,27 +56,30 @@ public class TelaEditarCurso extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtAtivo, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
-                    .addComponent(txtNome)
-                    .addComponent(txtCodigo))
-                .addContainerGap(33, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtNome)
+                            .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cbxAtivo)))
+                .addContainerGap(32, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(98, 98, 98))
+                .addGap(100, 100, 100))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(74, 74, 74)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(82, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -89,21 +90,44 @@ public class TelaEditarCurso extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txtAtivo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbxAtivo))
                 .addGap(18, 18, 18)
                 .addComponent(btnSave)
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addGap(78, 78, 78))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        JOptionPane.showMessageDialog(null, "Curso salvo com sucesso!");
-        
-        dispose();
-    }//GEN-LAST:event_btnSaveActionPerformed
+        /*CursoDao cursoDao = new CursoDao();
+        Curso cursoEscolhido = 
 
+        Long id = cursoEscolhido.getId();
+        Curso cursoEditando = cursoDao.findById(id);
+
+        if (cursoEditando == null) {
+            JOptionPane.showMessageDialog(null, "Curso inexistente!");
+        } else {
+            String nomeAntigo = cursoEditando.getNome();
+            String codigoAntigo = cursoEditando.getCodigoCurso();
+            boolean statusAntigo = cursoEditando.getAtivo();
+
+            txtNome.setText(nomeAntigo);
+            txtCodigo.setText(codigoAntigo);
+            cbxAtivo.setSelected(statusAntigo);
+
+            cursoEditando.setNome(txtNome.getText());
+            cursoEditando.setCodigoCurso(txtCodigo.getText());
+            cursoEditando.setAtivo(cbxAtivo.isSelected());
+
+            cursoDao.update(cursoEditando);
+
+            JOptionPane.showMessageDialog(null, "Alterações salvas com sucesso!");
+            metodoTelaPrincipal();
+            
+            dispose();
+        }*/
+    }//GEN-LAST:event_btnSaveActionPerformed
     /**
      * @param args the command line arguments
      */
@@ -138,13 +162,22 @@ public class TelaEditarCurso extends javax.swing.JFrame {
             }
         });
     }
-
+    
+    public void mostrarTela(TelaGerenciamentoCurso tela){
+        this.tGC = tela;
+        setVisible(true);
+    }
+    
+    public void metodoTelaPrincipal(){
+        tGC.metodoSubtelaAdicionarEditar();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
+    private javax.swing.JCheckBox cbxAtivo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField txtAtivo;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextField txtNome;
     // End of variables declaration//GEN-END:variables
