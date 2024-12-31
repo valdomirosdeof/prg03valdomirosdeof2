@@ -13,8 +13,8 @@ public class Curso extends PersistenceEntity implements Serializable{
     @Column(name = "nome", nullable = false)
     private String nome;
     
-    @Column(name = "codigo_curso", nullable = false, unique = true)
-    private String codigoCurso;
+    @Column(name = "codigo", nullable = false, unique = true)
+    private String codigo;
     
     @Column(name = "ativo")
     private boolean ativo;
@@ -28,12 +28,12 @@ public class Curso extends PersistenceEntity implements Serializable{
         this.nome = nome;
     }
 
-    public String getCodigoCurso() {
-        return codigoCurso;
+    public String getCodigo() {
+        return codigo;
     }
 
-    public void setCodigoCurso(String codigoCurso) {
-        this.codigoCurso = codigoCurso;
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
 
     public boolean getAtivo() {

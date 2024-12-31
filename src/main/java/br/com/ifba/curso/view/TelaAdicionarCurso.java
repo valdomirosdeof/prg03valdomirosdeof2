@@ -4,7 +4,8 @@
  */
 package br.com.ifba.curso.view;
 
-import br.com.ifba.curso.dao.CursoDao;
+import br.com.ifba.curso.controller.CursoController;
+import br.com.ifba.curso.controller.CursoIController;
 import br.com.ifba.curso.entity.Curso;
 import javax.swing.JOptionPane;
 
@@ -14,9 +15,11 @@ import javax.swing.JOptionPane;
  */
 public class TelaAdicionarCurso extends javax.swing.JFrame {
     private TelaGerenciamentoCurso tGC;
-
-    public TelaAdicionarCurso() {
+    private CursoIController cursoController = new CursoController();
+    
+    public TelaAdicionarCurso(TelaGerenciamentoCurso tGC) {
         initComponents();
+        this.tGC = tGC;
     }
 
     /**
@@ -91,7 +94,7 @@ public class TelaAdicionarCurso extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(cbxAtivo))
                 .addGap(18, 18, 18)
@@ -104,68 +107,21 @@ public class TelaAdicionarCurso extends javax.swing.JFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         //Adiciona um curso ao banco de dados.
         Curso curso = new Curso();
-        CursoDao cursoDao = new CursoDao();
+        
 
         curso.setNome(txtNome.getText());
-        curso.setCodigoCurso(txtCodigo.getText());
+        curso.setCodigo(txtCodigo.getText());
         curso.setAtivo(cbxAtivo.isSelected());
 
-        cursoDao.save(curso);
-        //Limpa os campos imediatamente após o cadastro das informações fornecidas.
-        txtNome.setText("");
-        txtCodigo.setText("");
-        cbxAtivo.setSelected(false);
+        cursoController.save(curso);
         
         JOptionPane.showMessageDialog(null, "Curso salvo com sucesso!");
-        metodoTelaPrincipal();
+        
+        tGC.atualizarTabela();
         
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaAdicionarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaAdicionarCurso().setVisible(true);
-            }
-        });
-    }
-    //Atualiza a tabela em tempo real após adicionar ou editar um curso.
-    public void mostrarTela(TelaGerenciamentoCurso tela){
-        this.tGC = tela;
-        setVisible(true);
-    }
-    //Atualiza a tabela em tempo real após adicionar ou editar um curso.
-    public void metodoTelaPrincipal(){
-        tGC.metodoSubtelaAdicionarEditar();
-    }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox cbxAtivo;

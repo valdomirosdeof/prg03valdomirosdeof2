@@ -4,9 +4,10 @@
  */
 package br.com.ifba.curso.view;
 
-/*import br.com.ifba.curso.dao.CursoDao;
+import br.com.ifba.curso.controller.CursoController;
+import br.com.ifba.curso.controller.CursoIController;
 import br.com.ifba.curso.entity.Curso;
-import javax.swing.JOptionPane;*/
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,9 +15,22 @@ import javax.swing.JOptionPane;*/
  */
 public class TelaEditarCurso extends javax.swing.JFrame {
     private TelaGerenciamentoCurso tGC;
-    
-    public TelaEditarCurso() {
+    private CursoIController cursoController = new CursoController();
+    private Curso curso;
+
+    //Captura as informações do curso selecionado na tabela e as insere nos campos.
+    public TelaEditarCurso(TelaGerenciamentoCurso tGC, Curso curso) {
         initComponents();
+        this.tGC = tGC;
+        this.curso = curso;
+
+        String nomeAntigo = curso.getNome();
+        String codigoAntigo = curso.getCodigo();
+        boolean statusAntigo = curso.getAtivo();
+
+        txtNome.setText(nomeAntigo);
+        txtCodigo.setText(codigoAntigo);
+        cbxAtivo.setSelected(statusAntigo);
     }
 
     /**
@@ -88,9 +102,9 @@ public class TelaEditarCurso extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(txtCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(cbxAtivo))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbxAtivo)
+                    .addComponent(jLabel3))
                 .addGap(18, 18, 18)
                 .addComponent(btnSave)
                 .addGap(78, 78, 78))
@@ -99,78 +113,21 @@ public class TelaEditarCurso extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        /*CursoDao cursoDao = new CursoDao();
-        Curso cursoEscolhido = 
+        //Salva as alterações do curso selecionado para edição.
+        Curso cursoEditado = this.curso;
 
-        Long id = cursoEscolhido.getId();
-        Curso cursoEditando = cursoDao.findById(id);
+        cursoEditado.setNome(txtNome.getText());
+        cursoEditado.setCodigo(txtCodigo.getText());
+        cursoEditado.setAtivo(cbxAtivo.isSelected());
 
-        if (cursoEditando == null) {
-            JOptionPane.showMessageDialog(null, "Curso inexistente!");
-        } else {
-            String nomeAntigo = cursoEditando.getNome();
-            String codigoAntigo = cursoEditando.getCodigoCurso();
-            boolean statusAntigo = cursoEditando.getAtivo();
+        cursoController.update(cursoEditado);
 
-            txtNome.setText(nomeAntigo);
-            txtCodigo.setText(codigoAntigo);
-            cbxAtivo.setSelected(statusAntigo);
+        JOptionPane.showMessageDialog(null, "Alterações salvas com sucesso!");
+        
+        tGC.atualizarTabela();
 
-            cursoEditando.setNome(txtNome.getText());
-            cursoEditando.setCodigoCurso(txtCodigo.getText());
-            cursoEditando.setAtivo(cbxAtivo.isSelected());
-
-            cursoDao.update(cursoEditando);
-
-            JOptionPane.showMessageDialog(null, "Alterações salvas com sucesso!");
-            metodoTelaPrincipal();
-            
-            dispose();
-        }*/
+        dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(TelaEditarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(TelaEditarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(TelaEditarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(TelaEditarCurso.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new TelaEditarCurso().setVisible(true);
-            }
-        });
-    }
-    
-    public void mostrarTela(TelaGerenciamentoCurso tela){
-        this.tGC = tela;
-        setVisible(true);
-    }
-    
-    public void metodoTelaPrincipal(){
-        tGC.metodoSubtelaAdicionarEditar();
-    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;

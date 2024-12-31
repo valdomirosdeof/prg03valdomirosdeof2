@@ -1,4 +1,4 @@
-package br.com.ifba.curso.main;
+package br.com.ifba.curso.view;
 
 /*import br.com.ifba.curso.dao.CursoDao;
 import br.com.ifba.curso.dao.CursoIDao;

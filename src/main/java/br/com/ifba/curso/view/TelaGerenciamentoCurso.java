@@ -4,18 +4,19 @@
  */
 package br.com.ifba.curso.view;
 
-import br.com.ifba.curso.dao.CursoDao;
+import br.com.ifba.curso.controller.CursoController;
+import br.com.ifba.curso.controller.CursoIController;
 import br.com.ifba.curso.entity.Curso;
 import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author valdo
  */
 public class TelaGerenciamentoCurso extends javax.swing.JFrame {
-    TelaAdicionarCurso tAC = new TelaAdicionarCurso();
-    TelaEditarCurso tEC = new TelaEditarCurso();
-    public CursoDao cursoDao = new CursoDao();
+    private CursoIController cursoController = new CursoController();
 
     public TelaGerenciamentoCurso() {
         initComponents();
@@ -44,6 +45,24 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
         setResizable(false);
 
         txtRetrieve.setText("Pesquisar...");
+        txtRetrieve.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtRetrieveFocusGained(evt);
+            }
+        });
+        txtRetrieve.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtRetrieveActionPerformed(evt);
+            }
+        });
+        txtRetrieve.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtRetrieveKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtRetrieveKeyReleased(evt);
+            }
+        });
 
         btnCreate.setText("Adicionar");
         btnCreate.addActionListener(new java.awt.event.ActionListener() {
@@ -121,31 +140,74 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         //Torna a tela de adicionar curso visível.
-        tAC.mostrarTela(this);
+        new TelaAdicionarCurso(this).setVisible(true);
     }//GEN-LAST:event_btnCreateActionPerformed
-    
+
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        //Exclui determinado curso que está selecionado na tabela, perguntando antes se o usuário o deseja excluir.
-        CursoDao cursoDao = new CursoDao();
-        Curso cursoEscolhido = this.cursoSelecionadoTabela();
+        //Exclui determinado curso que está selecionado na tabela.
+        Curso cursoEscolhido = this.CursoSelecionadoTabela();
 
         int jOP = JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir esse curso?", "Atenção!", JOptionPane.YES_NO_OPTION);
 
         if (jOP == JOptionPane.YES_OPTION) {
-            cursoDao.delete(cursoEscolhido);
+            cursoController.delete(cursoEscolhido);
             JOptionPane.showMessageDialog(null, "Curso excluído com sucesso!");
             this.atualizarTabela();
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        //Torna a tela de editar curso visível.
-        tEC.mostrarTela(this);
+        //Seleciona o curso a ser editado e torna a tela de editar curso visível.
+        Curso curso = CursoSelecionadoTabela();
+        
+        new TelaEditarCurso(this, curso).setVisible(true);
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void tblGerenciamentoCursoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGerenciamentoCursoMouseClicked
-        Curso curso = this.cursoSelecionadoTabela();
+        //Seleciona um curso na tabela.
+        Curso curso = this.CursoSelecionadoTabela();
     }//GEN-LAST:event_tblGerenciamentoCursoMouseClicked
+
+    private void txtRetrieveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRetrieveKeyPressed
+        
+    }//GEN-LAST:event_txtRetrieveKeyPressed
+    //Realiza pesquisa na JTable.
+    private void txtRetrieveKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRetrieveKeyReleased
+        TabelaGerenciamentoCurso tGC = (TabelaGerenciamentoCurso) tblGerenciamentoCurso.getModel();
+        TableRowSorter<TabelaGerenciamentoCurso> tRS = new TableRowSorter<>(tGC);
+        
+        tblGerenciamentoCurso.setRowSorter(tRS);
+        tRS.setRowFilter(RowFilter.regexFilter(txtRetrieve.getText()));
+    }//GEN-LAST:event_txtRetrieveKeyReleased
+
+    private void txtRetrieveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRetrieveActionPerformed
+        
+    }//GEN-LAST:event_txtRetrieveActionPerformed
+
+    private void txtRetrieveFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRetrieveFocusGained
+        txtRetrieve.setText("");
+    }//GEN-LAST:event_txtRetrieveFocusGained
+    
+    //Atualiza a tabela assim que um curso é adicionado, editado ou excluído.
+    public void atualizarTabela() {
+        TabelaGerenciamentoCurso tGC = new TabelaGerenciamentoCurso(cursoController.findAll());
+        tblGerenciamentoCurso.setModel(tGC);
+    }
+
+    //Obtém as informações de um curso cadastrado que está em determinada linha na tabela.
+    public Curso CursoSelecionadoTabela() {
+        int linhaSelecionada = tblGerenciamentoCurso.getSelectedRow();
+
+        if (linhaSelecionada >= 0) {
+            TabelaGerenciamentoCurso tGC = (TabelaGerenciamentoCurso) tblGerenciamentoCurso.getModel();
+
+            Curso curso = tGC.getObjetoCurso(linhaSelecionada);
+            return curso;
+        } else {
+            return null;
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -183,28 +245,7 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
             }
         });
     }
-    //Atualiza a tabela assim que um curso é adicionado, editado ou excluído.
-    public void atualizarTabela() {
-        TabelaGerenciamentoCurso tGC = new TabelaGerenciamentoCurso(cursoDao.listarTodosCursos());
-        tblGerenciamentoCurso.setModel(tGC);
-    }
-    //Obtém as informações de um curso cadastrado, que está em determinada linha na tabela.
-    public Curso cursoSelecionadoTabela() {
-        int linhaSelecionada = tblGerenciamentoCurso.getSelectedRow();
-
-        if (linhaSelecionada >= 0) {
-            TabelaGerenciamentoCurso tGC = (TabelaGerenciamentoCurso) tblGerenciamentoCurso.getModel();
-
-            Curso curso = tGC.getObjetoCurso(linhaSelecionada);
-            return curso;
-        }
-
-        return null;
-    }
-    //Atualiza a tabela em tempo real após adicionar ou editar um curso.
-    public void metodoSubtelaAdicionarEditar(){
-        atualizarTabela();
-    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;

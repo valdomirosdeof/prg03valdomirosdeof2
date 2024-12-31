@@ -6,7 +6,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-//Classe GenericDao, sobrescrevendo os métodos abstratos.
+//Classe GenericDao, sobrescrevendo os métodos abstratos. Tem acesso aos dados.
 @SuppressWarnings("unchecked")
 public class GenericDao <Entity extends PersistenceEntity> implements GenericIDao<Entity>{
     //Entity Manager e Entity Manager Factory,
@@ -43,7 +43,7 @@ public class GenericDao <Entity extends PersistenceEntity> implements GenericIDa
     //Encontrar todos os cursos cadastrados (Retrieve).
     @Override
     public List<Entity> findAll() {
-        return eM.createQuery(("from " + getTypeClass().getName())).getResultList();
+        return eM.createQuery(("FROM " + getTypeClass().getName())).getResultList();
     }
     //Encontrar curso por ID (Retrieve).
     @Override

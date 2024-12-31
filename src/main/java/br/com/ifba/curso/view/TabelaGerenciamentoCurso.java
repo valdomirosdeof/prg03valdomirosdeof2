@@ -53,7 +53,7 @@ public class TabelaGerenciamentoCurso extends AbstractTableModel{
         }else if(columnIndex == COL_NOME){
             return curso.getNome();
         }else if(columnIndex == COL_CODIGO){
-            return curso.getCodigoCurso();
+            return curso.getCodigo();
         }else if(columnIndex == COL_ATIVO){
             return curso.getAtivo();
         }
