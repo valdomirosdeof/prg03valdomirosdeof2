@@ -2,34 +2,39 @@ package br.com.ifba.curso.controller;
 
 import br.com.ifba.curso.entity.Curso;
 import br.com.ifba.curso.service.CursoIService;
-import br.com.ifba.curso.service.CursoService;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 //CursoController e métodos sobrescritos. Tem conexão com a camada Service e contém as funcionalidades do sistema.
-public class CursoController implements CursoIController{
-    private final CursoIService cursoIService = new CursoService();
-            
+
+@Controller//Bean do tipo Controller.
+public class CursoController implements CursoIController {
+
+    @Autowired//Conecta ao Service e demais camadas.
+    private CursoIService cursoService;
+
     @Override
-    public Curso save(Curso curso) throws RuntimeException{
-        return cursoIService.save(curso);
+    public Curso save(Curso curso) throws RuntimeException {
+        return cursoService.save(curso);
     }
 
     @Override
-    public Curso update(Curso curso) throws RuntimeException{
-        return cursoIService.update(curso);
+    public Curso update(Curso curso) throws RuntimeException {
+        return cursoService.update(curso);
     }
 
     @Override
-    public void delete(Curso curso) throws RuntimeException{
-        cursoIService.delete(curso);
+    public void delete(Curso curso) throws RuntimeException {
+        cursoService.delete(curso);
     }
 
     @Override
-    public List<Curso> findAll() throws RuntimeException{
-        return cursoIService.findAll();
+    public List<Curso> findAll() throws RuntimeException {
+        return cursoService.findAll();
     }
 
     @Override
-    public Curso findById(Long id) throws RuntimeException{
-        return cursoIService.findById(id);
+    public Curso findById(Long id) throws RuntimeException {
+        return cursoService.findById(id);
     }
 }

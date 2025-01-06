@@ -8,14 +8,15 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "cursos")
-public class Curso extends PersistenceEntity implements Serializable{
+public class Curso extends PersistenceEntity implements Serializable {
+
     //Atributos (Colunas) da tabela curso.
     @Column(name = "nome", nullable = false)
     private String nome;
-    
+
     @Column(name = "codigo", nullable = false, unique = true)
     private String codigo;
-    
+
     @Column(name = "ativo")
     private boolean ativo;
 

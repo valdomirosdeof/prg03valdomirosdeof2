@@ -4,23 +4,45 @@
  */
 package br.com.ifba.curso.view;
 
-import br.com.ifba.curso.controller.CursoController;
 import br.com.ifba.curso.controller.CursoIController;
 import br.com.ifba.curso.entity.Curso;
+import jakarta.annotation.PostConstruct;
 import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author valdo
  */
+@Component//Bean do tipo Component.
 public class TelaGerenciamentoCurso extends javax.swing.JFrame {
-    private CursoIController cursoController = new CursoController();
+
+    private TelaCadastrarCurso tCC;
+    private TelaEditarCurso tEC;
+
+    @Autowired//Conecta ao Controller e demais camadas.
+    private CursoIController cursoController;
+
+    @Autowired
+    private ApplicationContext aC;
 
     public TelaGerenciamentoCurso() {
         initComponents();
+        setLocationRelativeTo(null);
+    }
+
+    @PostConstruct
+    public void carregarTela() {
+        //Inicia os beans das subtelas.
+        tCC = aC.getBean(TelaCadastrarCurso.class);
+        tEC = aC.getBean(TelaEditarCurso.class);
+
         this.atualizarTabela();
+        this.desabilitarBotoes();
     }
 
     /**
@@ -32,59 +54,31 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        txtRetrieve = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblGerenciamentoCurso = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
         btnCreate = new javax.swing.JButton();
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        tblGerenciamentoCurso = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        txtRead = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gerenciamento de Cursos");
         setBackground(new java.awt.Color(255, 255, 255));
+        setPreferredSize(new java.awt.Dimension(720, 480));
         setResizable(false);
-
-        txtRetrieve.setText("Pesquisar...");
-        txtRetrieve.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtRetrieveFocusGained(evt);
-            }
-        });
-        txtRetrieve.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRetrieveActionPerformed(evt);
-            }
-        });
-        txtRetrieve.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtRetrieveKeyPressed(evt);
-            }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtRetrieveKeyReleased(evt);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
             }
         });
 
-        btnCreate.setText("Adicionar");
-        btnCreate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCreateActionPerformed(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
-        btnUpdate.setText("Editar");
-        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUpdateActionPerformed(evt);
-            }
-        });
-
-        btnDelete.setText("Excluir");
-        btnDelete.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDeleteActionPerformed(evt);
-            }
-        });
-
+        tblGerenciamentoCurso.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
         tblGerenciamentoCurso.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -96,6 +90,7 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
 
             }
         ));
+        tblGerenciamentoCurso.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tblGerenciamentoCurso.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblGerenciamentoCursoMouseClicked(evt);
@@ -103,91 +98,220 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tblGerenciamentoCurso);
 
+        jPanel3.setBackground(new java.awt.Color(0, 152, 59));
+        jPanel3.setPreferredSize(new java.awt.Dimension(240, 360));
+
+        btnCreate.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
+        btnCreate.setText("Cadastrar");
+        btnCreate.setAlignmentX(0.5F);
+        btnCreate.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
+
+        btnUpdate.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
+        btnUpdate.setText("Editar");
+        btnUpdate.setAlignmentX(0.5F);
+        btnUpdate.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
+        btnDelete.setText("Excluir");
+        btnDelete.setAlignmentX(0.5F);
+        btnDelete.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(227, 25, 25));
+
+        jLabel1.setFont(new java.awt.Font("Impact", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("CADASTRO DE CURSOS");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(69, 69, 69)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(122, 122, 122)
+                .addComponent(btnCreate)
+                .addGap(18, 18, 18)
+                .addComponent(btnUpdate)
+                .addGap(18, 18, 18)
+                .addComponent(btnDelete)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        txtRead.setFont(new java.awt.Font("Microsoft Sans Serif", 0, 12)); // NOI18N
+        txtRead.setText("Pesquisar...");
+        txtRead.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        txtRead.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtReadMouseClicked(evt);
+            }
+        });
+        txtRead.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtReadKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 468, Short.MAX_VALUE)
+                    .addComponent(txtRead))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(40, 40, 40)
+                .addComponent(txtRead, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 357, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtRetrieve, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCreate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtRetrieve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCreate)
-                    .addComponent(btnUpdate)
-                    .addComponent(btnDelete))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
-        //Torna a tela de adicionar curso visível.
-        new TelaAdicionarCurso(this).setVisible(true);
-    }//GEN-LAST:event_btnCreateActionPerformed
+//Desabilita botões de Editar e Excluir, limpa a seleção de curso na tabela e restaura a caixa de pesquisa ao estado sem uso.
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        this.tblGerenciamentoCurso.clearSelection();
+        this.desabilitarBotoes();
+        this.txtRead.setText("Pesquisar...");
+    }//GEN-LAST:event_formMouseClicked
+//Realiza a pesquisa na tabela de acordo com o texto digitado (Letras com acentos são ignoradas).
+    private void txtReadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtReadKeyReleased
 
+        this.tblGerenciamentoCurso.clearSelection();
+        this.desabilitarBotoes();
+
+        TabelaGerenciamentoCurso tGC = (TabelaGerenciamentoCurso) tblGerenciamentoCurso.getModel();
+        TableRowSorter<TabelaGerenciamentoCurso> tRS = new TableRowSorter<>(tGC);
+
+        tblGerenciamentoCurso.setRowSorter(tRS);
+        tRS.setRowFilter(RowFilter.regexFilter("(?i)" + txtRead.getText()));
+    }//GEN-LAST:event_txtReadKeyReleased
+//Limpa a seleção de curso da tabela, desabilita os botões de Editar e Excluir e apaga o texto "Pesquisar..." ao clicar na barra de pesquisa.
+    private void txtReadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtReadMouseClicked
+
+        this.tblGerenciamentoCurso.clearSelection();
+        this.desabilitarBotoes();
+        this.txtRead.setText("");
+    }//GEN-LAST:event_txtReadMouseClicked
+//Seleciona um curso na tabela.
+    private void tblGerenciamentoCursoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGerenciamentoCursoMouseClicked
+
+        this.txtRead.setText("Pesquisar...");
+
+        if (this.CursoSelecionadoTabela() == null) {
+            this.desabilitarBotoes();
+        }
+
+        this.habilitarBotoes();
+        Curso curso = this.CursoSelecionadoTabela();
+    }//GEN-LAST:event_tblGerenciamentoCursoMouseClicked
+//Exclui determinado curso que está selecionado na tabela.
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        //Exclui determinado curso que está selecionado na tabela.
+
         Curso cursoEscolhido = this.CursoSelecionadoTabela();
+
+        this.txtRead.setText("Pesquisar...");
+        this.tblGerenciamentoCurso.clearSelection();
+        this.desabilitarBotoes();
 
         int jOP = JOptionPane.showConfirmDialog(null, "Tem certeza de que deseja excluir esse curso?", "Atenção!", JOptionPane.YES_NO_OPTION);
 
         if (jOP == JOptionPane.YES_OPTION) {
-            cursoController.delete(cursoEscolhido);
-            JOptionPane.showMessageDialog(null, "Curso excluído com sucesso!");
+            try {
+                cursoController.delete(cursoEscolhido);
+                JOptionPane.showMessageDialog(null, "Curso excluído com sucesso!");
+            } catch (Exception error) {
+                JOptionPane.showMessageDialog(null, error, "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+
             this.atualizarTabela();
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
-
+//Seleciona o curso a ser editado e torna a tela de editar curso visível.
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
-        //Seleciona o curso a ser editado e torna a tela de editar curso visível.
-        Curso curso = CursoSelecionadoTabela();
-        
-        new TelaEditarCurso(this, curso).setVisible(true);
+
+        Curso cursoEscolhido = CursoSelecionadoTabela();
+
+        this.txtRead.setText("Pesquisar...");
+        this.tblGerenciamentoCurso.clearSelection();
+        this.desabilitarBotoes();
+
+        tEC.carregarTela(this, cursoEscolhido);
+        tEC.setVisible(true);
     }//GEN-LAST:event_btnUpdateActionPerformed
+//Torna a tela de adicionar curso visível.
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        this.txtRead.setText("Pesquisar...");
+        this.tblGerenciamentoCurso.clearSelection();
+        this.desabilitarBotoes();
 
-    private void tblGerenciamentoCursoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblGerenciamentoCursoMouseClicked
-        //Seleciona um curso na tabela.
-        Curso curso = this.CursoSelecionadoTabela();
-    }//GEN-LAST:event_tblGerenciamentoCursoMouseClicked
-
-    private void txtRetrieveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRetrieveKeyPressed
-        
-    }//GEN-LAST:event_txtRetrieveKeyPressed
-    //Realiza pesquisa na JTable.
-    private void txtRetrieveKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRetrieveKeyReleased
-        TabelaGerenciamentoCurso tGC = (TabelaGerenciamentoCurso) tblGerenciamentoCurso.getModel();
-        TableRowSorter<TabelaGerenciamentoCurso> tRS = new TableRowSorter<>(tGC);
-        
-        tblGerenciamentoCurso.setRowSorter(tRS);
-        tRS.setRowFilter(RowFilter.regexFilter(txtRetrieve.getText()));
-    }//GEN-LAST:event_txtRetrieveKeyReleased
-
-    private void txtRetrieveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRetrieveActionPerformed
-        
-    }//GEN-LAST:event_txtRetrieveActionPerformed
-
-    private void txtRetrieveFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtRetrieveFocusGained
-        txtRetrieve.setText("");
-    }//GEN-LAST:event_txtRetrieveFocusGained
-    
+        tCC.carregarTela(this);
+        tCC.setVisible(true);
+    }//GEN-LAST:event_btnCreateActionPerformed
     //Atualiza a tabela assim que um curso é adicionado, editado ou excluído.
     public void atualizarTabela() {
         TabelaGerenciamentoCurso tGC = new TabelaGerenciamentoCurso(cursoController.findAll());
@@ -207,7 +331,19 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
             return null;
         }
     }
-    
+
+    //Habilita os botões Editar e Excluir.
+    private void habilitarBotoes() {
+        this.btnUpdate.setEnabled(true);
+        this.btnDelete.setEnabled(true);
+    }
+
+    //Desabilita os botões Editar e Excluir.
+    private void desabilitarBotoes() {
+        this.btnUpdate.setEnabled(false);
+        this.btnDelete.setEnabled(false);
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -245,13 +381,16 @@ public class TelaGerenciamentoCurso extends javax.swing.JFrame {
             }
         });
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblGerenciamentoCurso;
-    private javax.swing.JTextField txtRetrieve;
+    private javax.swing.JTextField txtRead;
     // End of variables declaration//GEN-END:variables
 }

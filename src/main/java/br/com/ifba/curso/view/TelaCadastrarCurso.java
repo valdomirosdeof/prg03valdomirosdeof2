@@ -16,30 +16,20 @@ import org.springframework.stereotype.Component;
  * @author valdo
  */
 @Component//Bean do tipo Component
-public class TelaEditarCurso extends javax.swing.JFrame {
+public class TelaCadastrarCurso extends javax.swing.JFrame {
 
     private TelaGerenciamentoCurso tGC;
-    private Curso curso;
     
     @Autowired//Conecta ao Controller e demais camadas.
     private CursoIController cursoController;
 
-    public TelaEditarCurso() {
+    public TelaCadastrarCurso() {
         initComponents();
         setLocationRelativeTo(null);
     }
-    //Captura as informações do curso selecionado na tabela e as insere nos campos.
-    public void carregarTela(TelaGerenciamentoCurso tGC, Curso curso){
+    //Vincula o JFrame TelaGerenciamentoCurso a este JFrame.
+    public void carregarTela(TelaGerenciamentoCurso tGC){
         this.tGC = tGC;
-        this.curso = curso;
-
-        String nomeAntigo = curso.getNome();
-        String codigoAntigo = curso.getCodigo();
-        boolean statusAntigo = curso.getAtivo();
-
-        txtNome.setText(nomeAntigo);
-        txtCodigo.setText(codigoAntigo);
-        cbxAtivo.setSelected(statusAntigo);
     }
 
     /**
@@ -52,20 +42,18 @@ public class TelaEditarCurso extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtNome = new javax.swing.JTextField();
         txtCodigo = new javax.swing.JTextField();
         btnSave = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cbxAtivo = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel1.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 12)); // NOI18N
-        jLabel1.setText("Nome");
 
         jLabel2.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 12)); // NOI18N
         jLabel2.setText("Código");
@@ -81,6 +69,9 @@ public class TelaEditarCurso extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
+
+        jLabel1.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 12)); // NOI18N
+        jLabel1.setText("Nome");
 
         jLabel3.setFont(new java.awt.Font("Microsoft Sans Serif", 1, 12)); // NOI18N
         jLabel3.setText("Ativo?");
@@ -102,19 +93,19 @@ public class TelaEditarCurso extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(143, 143, 143))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(cbxAtivo)
-                        .addGap(14, 14, 14)))
-                .addGap(145, 145, 145))
+                        .addGap(158, 158, 158))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(85, 85, 85)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(84, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -128,7 +119,7 @@ public class TelaEditarCurso extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addComponent(btnSave)
-                .addContainerGap(81, Short.MAX_VALUE))
+                .addGap(80, 80, 80))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -139,33 +130,34 @@ public class TelaEditarCurso extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        //Salva as alterações do curso selecionado para edição e atualiza a tabela após a edição.
-        Curso cursoEditado = this.curso;
+        //Adiciona um curso ao banco de dados e atualiza a tabela após a adição.
+        Curso curso = new Curso();
 
-        cursoEditado.setNome(txtNome.getText());
-        cursoEditado.setCodigo(txtCodigo.getText());
-        cursoEditado.setAtivo(cbxAtivo.isSelected());
-
+        curso.setNome(txtNome.getText());
+        curso.setCodigo(txtCodigo.getText());
+        curso.setAtivo(cbxAtivo.isSelected());
+        
         if(this.validarCampos(curso) == false){
             JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos e tente novamente!", "Atenção!", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
         try{
-            cursoController.update(cursoEditado);
-            JOptionPane.showMessageDialog(null, "Alterações salvas com sucesso!");
+            cursoController.save(curso);
+            JOptionPane.showMessageDialog(null, "Curso cadastrado com sucesso!");
         }catch(Exception error){
             JOptionPane.showMessageDialog(null, error, "Erro", JOptionPane.ERROR_MESSAGE);
         }
 
+        this.limparCampos();
         tGC.atualizarTabela();
-
+        
         dispose();
     }//GEN-LAST:event_btnSaveActionPerformed
     //Verifica se todos os campos de texto estão preenchidos.
@@ -176,6 +168,13 @@ public class TelaEditarCurso extends javax.swing.JFrame {
             return true;
         }
     }
+    //Limpa os campos de texto após o cadastro.
+    private void limparCampos(){
+        txtNome.setText("");
+        txtCodigo.setText("");
+        cbxAtivo.setSelected(false);
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnSave;
     private javax.swing.JCheckBox cbxAtivo;
