@@ -15,4 +15,6 @@ public interface CursoIController {
     public abstract List<Curso> findAll();
 
     public abstract Curso findById(Long id);
+    
+    public abstract List<Curso> findByNome(String nome);
 }

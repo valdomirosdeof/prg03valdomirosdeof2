@@ -1,7 +1,7 @@
 package br.com.ifba.curso.service;
 
-import br.com.ifba.curso.dao.CursoIDao;
 import br.com.ifba.curso.entity.Curso;
+import br.com.ifba.curso.repository.CursoRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class CursoService implements CursoIService {
 
     @Autowired//Conecta ao Repository.
-    private CursoIDao cursoDao;
+    private CursoRepository cursoRepository;
 
     @Override
     public Curso save(Curso curso) throws RuntimeException {
@@ -20,27 +20,32 @@ public class CursoService implements CursoIService {
         } else if (curso.getId() != null) {
             throw new RuntimeException("Curso já existente no banco de dados!");
         } else {
-            return cursoDao.save(curso);
+            return cursoRepository.save(curso);
         }
     }
 
     @Override
     public Curso update(Curso curso) throws RuntimeException {
-        return cursoDao.update(curso);
+        return cursoRepository.save(curso);
     }
 
     @Override
     public void delete(Curso curso) throws RuntimeException {
-        cursoDao.delete(curso);
+        cursoRepository.delete(curso);
     }
 
     @Override
     public List<Curso> findAll() throws RuntimeException {
-        return cursoDao.findAll();
+        return cursoRepository.findAll();
     }
 
     @Override
     public Curso findById(Long id) throws RuntimeException {
-        return cursoDao.findById(id);
+        return cursoRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Curso> findByNome(String nome) {
+        return cursoRepository.findByNome(nome);
     }
 }

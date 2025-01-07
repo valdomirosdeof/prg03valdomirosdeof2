@@ -37,4 +37,9 @@ public class CursoController implements CursoIController {
     public Curso findById(Long id) throws RuntimeException {
         return cursoService.findById(id);
     }
+
+    @Override
+    public List<Curso> findByNome(String nome) {
+        return cursoService.findByNome(nome);
+    }
 }

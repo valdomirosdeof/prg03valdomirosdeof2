@@ -11,12 +11,13 @@ import java.io.Serializable;
 public class Curso extends PersistenceEntity implements Serializable {
 
     //Atributos (Colunas) da tabela curso.
+    //O nome não deve ser nulo.
     @Column(name = "nome", nullable = false)
     private String nome;
-
+    //O código deve ser único e não deve ser nulo.
     @Column(name = "codigo", nullable = false, unique = true)
     private String codigo;
-
+    //O status é false por padrão.
     @Column(name = "ativo")
     private boolean ativo;
 
