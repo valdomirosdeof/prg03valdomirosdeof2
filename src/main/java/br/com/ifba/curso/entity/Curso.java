@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name = "cursos")
@@ -13,36 +15,18 @@ public class Curso extends PersistenceEntity implements Serializable {
     //Atributos (Colunas) da tabela curso.
     //O nome não deve ser nulo.
     @Column(name = "nome", nullable = false)
+    @Getter
+    @Setter
     private String nome;
     //O código deve ser único e não deve ser nulo.
     @Column(name = "codigo", nullable = false, unique = true)
+    @Getter
+    @Setter
     private String codigo;
     //O status é false por padrão.
     @Column(name = "ativo")
+    @Getter
+    @Setter
     private boolean ativo;
 
-    //Getters e Setters.
-    public String getNome() {
-        return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
-    }
-
-    public String getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(String codigo) {
-        this.codigo = codigo;
-    }
-
-    public boolean getAtivo() {
-        return ativo;
-    }
-
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
-    }
 }

@@ -61,7 +61,7 @@ public class TabelaGerenciamentoCurso extends AbstractTableModel {
         } else if (columnIndex == COL_CODIGO) {
             return curso.getCodigo();
         } else if (columnIndex == COL_ATIVO) {
-            return curso.getAtivo();
+            return curso.isAtivo();
         }
 
         return "-";

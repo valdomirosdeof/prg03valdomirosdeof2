@@ -1,17 +1,17 @@
 package br.com.ifba.curso.controller;
 
 import br.com.ifba.curso.entity.Curso;
-import br.com.ifba.curso.service.CursoIService;
+import br.com.ifba.curso.service.CursoService;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 //CursoController e métodos sobrescritos. Tem conexão com a camada Service e contém as funcionalidades do sistema.
 
 @Controller//Bean do tipo Controller.
+@RequiredArgsConstructor
 public class CursoController implements CursoIController {
 
-    @Autowired//Conecta ao Service e demais camadas.
-    private CursoIService cursoService;
+    private final CursoService cursoService;
 
     @Override
     public Curso save(Curso curso) throws RuntimeException {

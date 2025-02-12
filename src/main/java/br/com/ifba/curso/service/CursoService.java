@@ -3,15 +3,15 @@ package br.com.ifba.curso.service;
 import br.com.ifba.curso.entity.Curso;
 import br.com.ifba.curso.repository.CursoRepository;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 //CursoService e métodos sobrescritos. Tem conexão com a camada DAO e contém as regras do sistema.
 @Service//Bean do tipo Service.
+@RequiredArgsConstructor
 public class CursoService implements CursoIService {
 
-    @Autowired//Conecta ao Repository.
-    private CursoRepository cursoRepository;
+    private final CursoRepository cursoRepository;
 
     @Override
     public Curso save(Curso curso) throws RuntimeException {

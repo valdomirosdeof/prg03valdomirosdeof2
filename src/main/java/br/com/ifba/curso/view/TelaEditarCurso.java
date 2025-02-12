@@ -34,7 +34,7 @@ public class TelaEditarCurso extends javax.swing.JFrame {
 
         String nomeAntigo = curso.getNome();
         String codigoAntigo = curso.getCodigo();
-        boolean statusAntigo = curso.getAtivo();
+        boolean statusAntigo = curso.isAtivo();
 
         txtNome.setText(nomeAntigo);
         txtCodigo.setText(codigoAntigo);
